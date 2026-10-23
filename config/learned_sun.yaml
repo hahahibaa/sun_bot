@@ -1,0 +1,140 @@
+# Learned sun spots (written by sun_brain mode:=learn). Poses are in the map frame (AMCL), currents in A.
+learned_on: 2026-10-23 19:40
+method: 'sun_brain LEARN: day clock frozen (sun_sensor speed 0) during each survey,
+  so every entry is the sun at exactly that hour; the robot searched each sunlit window
+  with sweep legs + edge-lux gradient climb'
+learning_sim_s: 774.5
+complete: true
+samples:
+- hour: 7.0
+  azimuth: 107.1
+  elevation: 10.2
+  full_sun_current: 0.108
+  windows:
+    south:
+      found: true
+      best_current: 0.047
+      reachable: true
+      x: -4.33
+      y: -4.56
+      yaw: -3.0
+      search_s: 64.6
+    east:
+      found: true
+      best_current: 0.107
+      reachable: true
+      x: 5.31
+      y: 0.68
+      yaw: 1.33
+      search_s: 56.4
+  survey_sim_s: 121.0
+- hour: 9.0
+  azimuth: 124.3
+  elevation: 35.1
+  full_sun_current: 0.326
+  windows:
+    east:
+      found: true
+      best_current: 0.326
+      reachable: true
+      x: 7.87
+      y: 1.1
+      yaw: -0.05
+      search_s: 17.4
+    south:
+      found: true
+      best_current: 0.326
+      reachable: true
+      x: -1.28
+      y: -4.78
+      yaw: -2.19
+      search_s: 60.3
+  survey_sim_s: 77.7
+- hour: 11.0
+  azimuth: 157.5
+  elevation: 52.9
+  full_sun_current: 0.449
+  windows:
+    south:
+      found: true
+      best_current: 0.442
+      reachable: true
+      x: -1.32
+      y: -4.9
+      yaw: -1.64
+      search_s: 5.5
+    east:
+      found: false
+      best_current: 0.439
+      reachable: false
+      x: null
+      y: null
+      yaw: null
+      search_s: 117.4
+  survey_sim_s: 122.9
+- hour: 13.0
+  azimuth: 206.6
+  elevation: 51.9
+  full_sun_current: 0.443
+  windows:
+    south:
+      found: true
+      best_current: 0.443
+      reachable: true
+      x: 1.29
+      y: -4.78
+      yaw: 2.66
+      search_s: 44.0
+    west:
+      found: false
+      best_current: 0.44
+      reachable: false
+      x: null
+      y: null
+      yaw: null
+      search_s: 111.8
+  survey_sim_s: 155.8
+- hour: 15.0
+  azimuth: 237.7
+  elevation: 32.9
+  full_sun_current: 0.309
+  windows:
+    west:
+      found: true
+      best_current: 0.306
+      reachable: true
+      x: -7.7
+      y: 1.49
+      yaw: -3.14
+      search_s: 16.6
+    south:
+      found: true
+      best_current: 0.31
+      reachable: true
+      x: 1.38
+      y: -4.78
+      yaw: -0.96
+      search_s: 61.0
+  survey_sim_s: 77.6
+- hour: 17.0
+  azimuth: 253.9
+  elevation: 7.8
+  full_sun_current: 0.085
+  windows:
+    south:
+      found: true
+      best_current: 0.085
+      reachable: true
+      x: 8.85
+      y: -3.4
+      yaw: 1.81
+      search_s: 70.3
+    west:
+      found: false
+      best_current: 0.087
+      reachable: false
+      x: null
+      y: null
+      yaw: null
+      search_s: 144.3
+  survey_sim_s: 214.6

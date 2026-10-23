@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<!--
+  sun_bot: differential-drive robot carrying a potted plant.
+  Model frame = ground under the robot. base_link = middle of the wheel axle at z = 0.10, so
+  the robot turns in place about base_link (what Nav2 and the diff-drive odometry assume).
+    body    0.40 x 0.30 x 0.15 m, 3 kg, centre at x = -0.08, z = 0.10 (x -0.28 .. +0.12)
+    wheels  r = 0.05, width 0.04, 0.3 kg, axle at x = 0, y = +/-0.18
+    caster  frictionless sphere r = 0.025 at x = -0.22 (part of base_link)
+    footprint incl. wheels: x -0.28 .. +0.12, y -0.20 .. +0.20
+    lidar   scan plane at z = 0.26, above everything else so it never sees the robot
+    pot     decoration only (visuals, no collision), top of plant at z = 0.235
+  Also parsed by robot_state_publisher through sdformat_urdf, so keep it a single
+  flat model (no nested models / includes).
+-->
+<sdf version="1.8">
+  <model name="sun_bot">
+
+    <!-- ===================== body ===================== -->
+    <link name="base_link">
+      <pose>0 0 0.10 0 0 0</pose>
+      <inertial>
+        <pose>-0.08 0 0 0 0 0</pose>
+        <mass>3.0</mass>
+        <!-- solid box: I = m/12 (b^2 + c^2) -->
+        <inertia>
+          <ixx>0.028125</ixx><iyy>0.045625</iyy><izz>0.0625</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="body_collision">
+        <pose>-0.08 0 0 0 0 0</pose>
+        <geometry><box><size>0.4 0.3 0.15</size></box></geometry>
+      </collision>
+      <visual name="body_visual">
+        <pose>-0.08 0 0 0 0 0</pose>
+        <geometry><box><size>0.4 0.3 0.15</size></box></geometry>
+        <material>
+          <ambient>0.9 0.6 0.1 1</ambient><diffuse>0.9 0.6 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <!-- caster: touches the ground at z = 0 (centre 0.025 - 0.10 = -0.075) -->
+      <collision name="caster_collision">
+        <pose>-0.22 0 -0.075 0 0 0</pose>
+        <geometry><sphere><radius>0.025</radius></sphere></geometry>
+        <surface>
+          <friction>
+            <ode><mu>0.0</mu><mu2>0.0</mu2></ode>
+            <bullet><friction>0.0</friction><friction2>0.0</friction2></bullet>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="caster_visual">
+        <pose>-0.22 0 -0.075 0 0 0</pose>
+        <geometry><sphere><radius>0.025</radius></sphere></geometry>
+        <material><ambient>0.2 0.2 0.2 1</ambient><diffuse>0.2 0.2 0.2 1</diffuse></material>
+      </visual>
+
+      <!-- decoration: terracotta pot (top of body is z = +0.075) -->
+      <visual name="pot_visual">
+        <pose>-0.19 0 0.095 0 0 0</pose>
+        <geometry><cylinder><radius>0.045</radius><length>0.04</length></cylinder></geometry>
+        <material><ambient>0.7 0.3 0.15 1</ambient><diffuse>0.7 0.3 0.15 1</diffuse></material>
+      </visual>
+      <!-- decoration: green plant sitting in the pot -->
+      <visual name="plant_visual">
+        <pose>-0.19 0 0.11 0 0 0</pose>
+        <geometry><sphere><radius>0.025</radius></sphere></geometry>
+        <material><ambient>0.1 0.6 0.1 1</ambient><diffuse>0.1 0.7 0.1 1</diffuse></material>
+      </visual>
+
+      <!-- lidar mast -->
+      <visual name="mast_visual">
+        <pose>-0.03 0 0.1075 0 0 0</pose>
+        <geometry><cylinder><radius>0.01</radius><length>0.065</length></cylinder></geometry>
+        <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material>
+      </visual>
+    </link>
+
+    <!-- ===================== drive wheels ===================== -->
+    <!-- link frames are NOT rotated (only the geometry is), so the joint axis is plain +y -->
+    <link name="left_wheel">
+      <pose>0 0.18 0.05 0 0 0</pose>
+      <inertial>
+        <mass>0.3</mass>
+        <!-- cylinder about y: Iyy = m r^2 / 2, Ixx = Izz = m/12 (3 r^2 + h^2) -->
+        <inertia>
+          <ixx>0.0002275</ixx><iyy>0.000375</iyy><izz>0.0002275</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 0 1.5707963 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>0.04</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 0 1.5707963 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>0.04</length></cylinder></geometry>
+        <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
+      </visual>
+    </link>
+
+    <link name="right_wheel">
+      <pose>0 -0.18 0.05 0 0 0</pose>
+      <inertial>
+        <mass>0.3</mass>
+        <inertia>
+          <ixx>0.0002275</ixx><iyy>0.000375</iyy><izz>0.0002275</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 0 1.5707963 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>0.04</length></cylinder></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction></surface>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 0 1.5707963 0 0</pose>
+        <geometry><cylinder><radius>0.05</radius><length>0.04</length></cylinder></geometry>
+        <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
+      </visual>
+    </link>
+
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>left_wheel</child>
+      <axis><xyz>0 1 0</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>right_wheel</child>
+      <axis><xyz>0 1 0</xyz><limit><lower>-1e16</lower><upper>1e16</upper></limit></axis>
+    </joint>
+
+    <!-- ===================== lidar ===================== -->
+    <link name="lidar_link">
+      <pose>-0.03 0 0.26 0 0 0</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.00005</ixx><iyy>0.00005</iyy><izz>0.00005</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><cylinder><radius>0.035</radius><length>0.04</length></cylinder></geometry>
+      </collision>
+      <visual name="visual">
+        <geometry><cylinder><radius>0.035</radius><length>0.04</length></cylinder></geometry>
+        <material><ambient>0.15 0.15 0.15 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material>
+      </visual>
+      <sensor name="lidar" type="gpu_lidar">
+        <topic>scan</topic>
+        <!-- frame_id put in the LaserScan header, must match the TF frame from robot_state_publisher -->
+        <ignition_frame_id>lidar_link</ignition_frame_id>
+        <update_rate>10</update_rate>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159265</min_angle>
+              <!-- pi - 1 deg: 360 rays exactly 1 deg apart, no duplicate ray at +/-pi -->
+              <max_angle>3.12413936</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </vertical>
+          </scan>
+          <!-- min > housing radius so the robot never sees itself -->
+          <range><min>0.12</min><max>10.0</max><resolution>0.01</resolution></range>
+          <noise><type>gaussian</type><mean>0.0</mean><stddev>0.01</stddev></noise>
+        </lidar>
+      </sensor>
+    </link>
+    <joint name="lidar_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>lidar_link</child>
+    </joint>
+
+    <!-- ===================== plugins ===================== -->
+    <plugin filename="ignition-gazebo-diff-drive-system" name="ignition::gazebo::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.36</wheel_separation>
+      <wheel_radius>0.05</wheel_radius>
+      <odom_publish_frequency>30</odom_publish_frequency>
+      <max_linear_acceleration>1.0</max_linear_acceleration>
+      <min_linear_acceleration>-1.0</min_linear_acceleration>
+      <max_angular_acceleration>2.0</max_angular_acceleration>
+      <min_angular_acceleration>-2.0</min_angular_acceleration>
+      <topic>/cmd_vel</topic>
+      <odom_topic>/odom</odom_topic>
+      <tf_topic>/tf</tf_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+    </plugin>
+
+    <!-- ground-truth pose (world frame) for the fake sun sensors, bridged to /sun_bot/ground_truth.
+         Its TF goes to a Gazebo-only topic, so it never reaches ROS /tf. -->
+    <plugin filename="ignition-gazebo-odometry-publisher-system" name="ignition::gazebo::systems::OdometryPublisher">
+      <odom_frame>world</odom_frame>
+      <robot_base_frame>sun_bot</robot_base_frame>
+      <odom_publish_frequency>20</odom_publish_frequency>
+      <odom_topic>/sun_bot/ground_truth</odom_topic>
+      <tf_topic>/sun_bot/ground_truth_tf</tf_topic>
+      <dimensions>2</dimensions>
+    </plugin>
+
+    <!-- publishes on /world/warehouse/model/sun_bot/joint_state; bridged to /joint_states -->
+    <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher"/>
+
+  </model>
+</sdf>

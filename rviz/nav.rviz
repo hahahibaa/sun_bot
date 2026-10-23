@@ -1,0 +1,241 @@
+Panels:
+- Class: rviz_common/Displays
+  Help Height: 70
+  Name: Displays
+  Property Tree Widget:
+    Expanded: null
+    Splitter Ratio: 0.5
+  Tree Height: 892
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Name: Grid
+    Enabled: true
+    Value: true
+    Cell Size: 1
+    Plane Cell Count: 24
+    Reference Frame: <Fixed Frame>
+    Color: 160; 160; 164
+    Alpha: 0.3
+  - Class: rviz_default_plugins/Map
+    Name: Map
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /map
+      Depth: 5
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color Scheme: map
+    Alpha: 1.0
+    Draw Behind: true
+  - Class: rviz_default_plugins/Map
+    Name: Global Costmap
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /global_costmap/costmap
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color Scheme: costmap
+    Alpha: 0.3
+    Draw Behind: false
+  - Class: rviz_default_plugins/Map
+    Name: Local Costmap
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /local_costmap/costmap
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color Scheme: costmap
+    Alpha: 0.5
+    Draw Behind: false
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Sun Patches
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /sun/patches
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/Path
+    Name: Planned Path
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /plan
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color: 0; 220; 0
+    Line Style: Billboards
+    Line Width: 0.06
+    Alpha: 1
+  - Class: rviz_default_plugins/Path
+    Name: Lookahead Arc
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /lookahead_arc
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color: 255; 0; 255
+    Line Style: Billboards
+    Line Width: 0.04
+    Alpha: 1
+  - Class: rviz_default_plugins/Polygon
+    Name: Footprint
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /local_costmap/published_footprint
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color: 0; 120; 255
+    Alpha: 1
+  - Class: rviz_default_plugins/Polygon
+    Name: Safety Stop Zone
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /polygon_stop
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Color: 255; 60; 60
+    Alpha: 1
+  - Class: nav2_rviz_plugins/ParticleCloud
+    Name: AMCL Particles
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /particle_cloud
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+    Color: 0; 180; 0
+    Shape: Arrow (Flat)
+    Arrow Length: 0.1
+    Alpha: 1
+  - Class: rviz_default_plugins/RobotModel
+    Name: RobotModel
+    Enabled: true
+    Value: true
+    Description Source: Topic
+    Description Topic:
+      Value: /robot_description
+      Depth: 5
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+    Visual Enabled: true
+    Collision Enabled: false
+    Alpha: 1
+  - Class: rviz_default_plugins/LaserScan
+    Name: LaserScan
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /scan
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+    Style: Points
+    Size (Pixels): 3
+    Color Transformer: FlatColor
+    Color: 255; 0; 0
+    Decay Time: 0
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Windows
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /window_markers
+      Depth: 5
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/Marker
+    Name: Brain
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /sun_brain/marker
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/Marker
+    Name: Plant
+    Enabled: true
+    Value: true
+    Topic:
+      Value: /plant/marker
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/SetInitialPose
+    Topic:
+      Value: /initialpose
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  - Class: rviz_default_plugins/SetGoal
+    Topic:
+      Value: /goal_pose
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Angle: 0
+      Name: Current View
+      Near Clip Distance: 0.01
+      Scale: 55
+      Target Frame: <Fixed Frame>
+      Value: TopDownOrtho (rviz_default_plugins)
+      X: 0
+      Y: 0
+    Saved: null
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1000
+  Width: 1700
+  Hide Left Dock: true
+  Hide Right Dock: true
+  X: 0
+  Y: 0

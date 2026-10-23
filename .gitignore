@@ -1,0 +1,25 @@
+# colcon workspace output (if the repo is ever used as a workspace root)
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# run logs and media (videos are linked from the README, not stored here)
+*.csv
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.bag
+*.db3
+*.log
+
+# editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

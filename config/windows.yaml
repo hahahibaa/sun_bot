@@ -1,0 +1,31 @@
+# Windows of the warehouse, in the map frame (= Gazebo world frame, robot spawns at 0,0 yaw 0).
+# Positions come from the building geometry (worlds/make_world.py), not from the lidar:
+# the windows are 1.0-2.2 m high and the lidar scans at 0.26 m, so the map shows solid wall there.
+#   centre:      centre of the window opening, on the wall's centre line [x, y] (m)
+#   facing_yaw:  direction the window faces, outward normal (rad; 0 = +x/east)
+#   parking:     where the robot parks ~1 m inside the room, facing the window (x, y m; yaw rad)
+frame_id: map
+window_width: 2.0      # m
+sill_height: 1.0       # m
+top_height: 2.2        # m
+wall_thickness: 0.2    # m (the window reveal shades part of the light)
+room: {x_min: -9.9, x_max: 9.9, y_min: -5.9, y_max: 5.9}   # inner wall faces
+# boxes that block sunlight (the pallets in worlds/make_world.py: 1.2 x 1.0 x 1.0 m)
+shadow_boxes:
+  - {centre: [-4.0, 2.0], size: [1.2, 1.0], height: 1.0}
+  - {centre: [3.0, 3.0], size: [1.2, 1.0], height: 1.0}
+  - {centre: [5.0, -2.0], size: [1.2, 1.0], height: 1.0}
+  - {centre: [-6.0, -3.0], size: [1.2, 1.0], height: 1.0}
+windows:
+  - name: east         # morning sun
+    centre: [10.0, 0.0]
+    facing_yaw: 0.0
+    parking: {x: 9.0, y: 0.0, yaw: 0.0}
+  - name: south        # midday sun
+    centre: [0.0, -6.0]
+    facing_yaw: -1.5707963
+    parking: {x: 0.0, y: -5.0, yaw: -1.5707963}
+  - name: west         # afternoon sun
+    centre: [-10.0, 0.0]
+    facing_yaw: 3.1415927
+    parking: {x: -9.0, y: 0.0, yaw: 3.1415927}
