@@ -25,7 +25,6 @@ floor, blue line = the robot's path, ring colour = what the robot is doing.*
 | Driving with the lidar, obstacles in red | [YouTube](https://youtu.be/37CWU87PLBA) |
 | Building the map live (SLAM) | [YouTube](https://youtu.be/y3u-i91V3TA) |
 | Nav2 driving to the windows | [YouTube](https://youtu.be/jt4Z89O806I) |
-| Full-resolution videos (RViz demo, replays, day 1 learning) | *link to be added* |
 
 ## Results
 
