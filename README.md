@@ -92,6 +92,16 @@ flowchart LR
 - **Safety:** every motion goes through Nav2 or `/cmd_vel`, and so through the collision monitor,
   which stops the robot when anything is within 30 cm of its body.
 
+### Simulated sensor vs real part
+
+| In the simulation | Real part | Notes |
+|---|---|---|
+| Panel current (`/sun/panel_current`, 0.55 A in full sun) | 10 W solar panel + INA219 current sensor | 0.55 A x ~18 V = 10 W; the INA219 (0.1 ohm shunt, up to 3.2 A) reads it directly. The panel must feed a load or charger for the current to mean anything. |
+| 4 edge light sensors (`/sun/edge_lux`) | VEML7700 (up to ~120k lux), or BH1750 behind a diffuser | The sim reads ~60k lux in the sun (up to ~80k lux at noon). A BH1750 saturates at ~65k lux at its default sensitivity, so it would clip in direct sun: use a VEML7700, or put a diffuser (or a lower-sensitivity setting) on the BH1750. ~300 lux indoors is easy for both. |
+| 360-degree lidar (10 m, 360 rays, 10 Hz) | RPLidar A1 | 12 m range, 360 degrees, ~5.5 Hz scans; plenty for a 20 x 12 m room. |
+| Ground-truth pose (only used by `sun_sensor` to fake the light) | none needed: AMCL on the real lidar | On hardware the sensors read the real light, so no ground truth is used anywhere; `sun_brain` already navigates with AMCL on the lidar. |
+| Plant moisture (`plant_monitor`) | Capacitive soil-moisture probe | Capacitive rather than resistive probes, which corrode in wet soil. |
+
 ## Build log
 
 From the project notes, in the order it was built.
