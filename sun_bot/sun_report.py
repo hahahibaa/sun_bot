@@ -8,6 +8,8 @@
     ros2 run sun_bot sun_report --day-run day2.csv    # docs/day2_run.png: current + states
     ros2 run sun_bot sun_report --compare parked.csv greedy.csv brain.csv
                                                       # strategy table + docs/strategies.png
+    ros2 run sun_bot sun_report --compare-seeds ~/sun_ws/docs/seeds
+                                                      # mean / min-max over seeds + strategies.png
 """
 import argparse
 import csv
@@ -341,6 +343,64 @@ def compare(csv_paths, path):
     print(f'saved {path}')
 
 
+def compare_seeds(folder, path):
+    """Mean and min-max per strategy over run_<strategy>_s<seed>.csv files; bar chart with
+    min-max error bars and one dot per seed."""
+    import glob
+    import re
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    runs = {}
+    for p in sorted(glob.glob(os.path.join(folder, 'run_*_s*.csv'))):
+        m = re.match(r'run_(\w+?)_s(\d+)\.csv$', os.path.basename(p))
+        if m:
+            met = run_metrics(read_rows(p))
+            if met['daylight_h'] < 10.0:                      # day not finished (yet)
+                print(f'skipped {os.path.basename(p)}: only {met["daylight_h"]:.1f} h logged')
+                continue
+            runs.setdefault(m.group(1), {})[int(m.group(2))] = met
+    order = [k for k in ('parked', 'greedy', 'brain') if k in runs] + \
+        sorted(k for k in runs if k not in ('parked', 'greedy', 'brain'))
+    names = {'parked': 'parked (south spot)', 'greedy': 'greedy (no map)',
+             'brain': 'sun_brain'}
+    metrics = [('in_sun_pct', 'daylight in the sun (%)', '{:.1f}'),
+               ('sun_energy_Ah', 'sun energy (A h)', '{:.2f}'),
+               ('distance_m', 'distance driven (m)', '{:.0f}')]
+    summary = {}
+    print(f'{"strategy":22s} {"seeds":>5s}  ' + '  '.join(f'{lbl:>28s}' for _, lbl, _ in metrics))
+    for k in order:
+        seeds = sorted(runs[k])
+        row = []
+        for key, _, fmt in metrics:
+            vals = [runs[k][sd][key] for sd in seeds]
+            mean = sum(vals) / len(vals)
+            summary.setdefault(k, {})[key] = (mean, min(vals), max(vals), vals)
+            row.append(f'{fmt.format(mean)} ({fmt.format(min(vals))}-{fmt.format(max(vals))})')
+        print(f'{names.get(k, k):22s} {len(seeds):5d}  ' + '  '.join(f'{c:>28s}' for c in row))
+    print('seeds:', ', '.join(f'{k}: {sorted(runs[k])}' for k in order))
+    colours = {'parked': '#9e9ac8', 'greedy': '#fd8d3c', 'brain': '#31a354'}
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4.6))
+    for ax, (key, label, _) in zip(axes, metrics):
+        for i, k in enumerate(order):
+            mean, lo, hi, vals = summary[k][key]
+            ax.bar(i, mean, color=colours.get(k, 'gray'), alpha=0.85, width=0.6)
+            ax.errorbar(i, mean, yerr=[[mean - lo], [hi - mean]], color='black', capsize=8,
+                        lw=1.5)
+            ax.plot([i] * len(vals), vals, 'o', color='black', ms=4, alpha=0.6)
+        ax.set_xticks(range(len(order)))
+        ax.set_xticklabels([names.get(k, k) for k in order], fontsize=9)
+        ax.set_title(label)
+        ax.grid(axis='y', alpha=0.3)
+    n = len(runs[order[0]]) if order else 0
+    fig.suptitle(f'Three strategies over {n} cloud seeds: bar = mean, line = min-max, '
+                 f'dots = individual days')
+    fig.tight_layout()
+    fig.savefig(path, dpi=110)
+    print(f'saved {path}')
+    return summary
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -355,9 +415,14 @@ def main():
                     help='plot learned spots (default: config/learned_sun.yaml)')
     ap.add_argument('--day-run', metavar='CSV', help='plot one sun_brain day')
     ap.add_argument('--compare', nargs='+', metavar='CSV', help='compare strategy runs')
+    ap.add_argument('--compare-seeds', metavar='DIR',
+                    help='mean / min-max over run_<strategy>_s<seed>.csv files in DIR')
     a = ap.parse_args()
     if a.panel:
         plot_panel(a.panel, os.path.join(a.out_dir, 'panel_current.png'))
+        return
+    if a.compare_seeds:
+        compare_seeds(a.compare_seeds, os.path.join(a.out_dir, 'strategies.png'))
         return
     if a.learned or a.day_run or a.compare:
         cfg, room = load_windows(a.windows)
