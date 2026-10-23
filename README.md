@@ -131,9 +131,11 @@ normal driving the lidar sees obstacles 10 m away and Nav2 plans around them lon
 
 **6. The sun.** The sun's position is calculated for the date, time and location (sunrise 06:09,
 noon elevation 55 degrees, sunset 17:39 on 23 October), and the light through each window is
-projected onto the floor. The patches move across all three windows during the day.
+projected onto the floor. The patches move across all three windows during the day: here all
+the patches in RViz, the west patch next to the robot in the afternoon, and the south patch at
+the end of a planned path.
 
-<img src="docs/build_log/10_sun_patches_rviz.png" width="49%"> <img src="docs/sun_patches.png" width="49%">
+<img src="docs/build_log/10_sun_patches_rviz.png" width="32%"> <img src="docs/build_log/11_sun_patch_west.png" width="32%"> <img src="docs/build_log/12_sun_path_south.png" width="32%">
 
 **7. Following the sun.** The robot now follows the sunlight from all three windows; the
 plant's soil dries faster in the sun and the robot buzzes when it is thirsty.
